@@ -15,7 +15,6 @@
                      :data="displayedData">
             </l-table>
 
-
               <nav>
               <ul class="pagination">
                 <li class="page-item">
@@ -25,7 +24,7 @@
                   <button type="button" class="page-link" v-if="page != 1" @click="page--"> Previous </button>
                 </li>
                 <li class="page-item">
-                  <button type="button" class="page-link" v-for="pageNumber in pages.slice(page-1, page+5)" @click="page = pageNumber"> {{pageNumber}} </button>
+                  <button type="button" class="page-link" v-for="pageNumber in pages.slice(page-1, page+10)" :key="pageNumber" @click="page = pageNumber"> {{pageNumber}} </button>
                 </li>
                 <li class="page-item">
                   <button type="button" @click="page++" v-if="page < pages.length" class="page-link"> Next </button>
@@ -43,6 +42,7 @@
     </div>
   </div>
 </template>
+
 <script>
   import axios from 'axios'
   import qs from 'qs'
@@ -60,12 +60,11 @@
       return {
         posts : [],
         page: 1,
-        perPage: 50,
+        perPage: 25,
         offset: 0,
         limit: 20000,
         pages: [],
         columns: [...columns],
-
       }
     },
     methods: {
@@ -73,10 +72,10 @@
           getPosts () {
               axios.post('http://localhost:9000/domainrank',
               qs.stringify({
-                limit : this.limit,
-                offset: this.offset
+                  limit : this.limit,
+                  offset: this.offset
               }),
-              {'content-type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                  {'content-type': 'application/x-www-form-urlencoded;charset=utf-8'}
               )
               .then(res => {
                   this.posts = res.data.data
@@ -119,15 +118,15 @@
 </script>
 <style>
     button.page-link {
-	display: inline-block;
-}
-button.page-link {
-    font-size: 20px;
-    color: #29b3ed;
-    font-weight: 500;
-}
-.offset{
-  width: 500px !important;
-  margin: 20px auto;
-}
+      display: inline-block;
+    }
+    button.page-link {
+        font-size: 20px;
+        color: #29b3ed;
+        font-weight: 500;
+    }
+    .offset{
+      width: 500px !important;
+      margin: 20px auto;
+    }
 </style>
